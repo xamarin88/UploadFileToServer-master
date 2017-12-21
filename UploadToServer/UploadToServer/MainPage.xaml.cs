@@ -22,29 +22,6 @@ namespace UploadToServer
             InitializeComponent();
         }
 
-        private async void PickPhoto_Clicked(object sender, EventArgs e)
-        {
-            await CrossMedia.Current.Initialize();
-
-            if (!CrossMedia.Current.IsPickPhotoSupported)
-            {
-                await DisplayAlert("No PickPhoto", ":( No PickPhoto available.", "OK");
-                return;
-            }
-
-            _mediaFile = await CrossMedia.Current.PickPhotoAsync();
-
-            if (_mediaFile == null)
-                return;
-
-            LocalPathLabel.Text = _mediaFile.Path;
-
-            FileImage.Source = ImageSource.FromStream(() =>
-            {
-                return _mediaFile.GetStream();
-            });
-        }
-
         private async void TakePhoto_Clicked(object sender, EventArgs e)
         {
             await CrossMedia.Current.Initialize();
@@ -55,6 +32,8 @@ namespace UploadToServer
                 return;
             }
 
+            lblMessage.Text = "Generating Photo...";
+
             //myImage.jpg need to combine sender phone number
             _mediaFile = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
             {
@@ -63,12 +42,13 @@ namespace UploadToServer
                 //CompressionQuality = 92
             });
 
-            if (_mediaFile == null)
+           if (_mediaFile == null)
                 return;
 
-            LocalPathLabel.Text = _mediaFile.Path;
+            lblMessage.Text = "Ready to go";
 
-            
+            //LocalPathLabel.Text = _mediaFile.Path;
+
             FileImage.Source = ImageSource.FromStream(() =>
             {
                 return _mediaFile.GetStream();
@@ -77,23 +57,32 @@ namespace UploadToServer
 
         private async void UploadFile_Clicked(object sender, EventArgs e)
         {
-            var content = new MultipartFormDataContent();
+            if (lblMessage.Text == "Ready to go")
+            {
+                lblMessage.Text = "Uploading...";
 
-            content.Add(new StreamContent(_mediaFile.GetStream()),
-               "\"file\"",
-               $"\"{_mediaFile.Path}\"");
+                var content = new MultipartFormDataContent();
 
-            var httpClient = new HttpClient();
+                content.Add(new StreamContent(_mediaFile.GetStream()),
+                   "\"file\"",
+                   $"\"{_mediaFile.Path}\"");
 
-            var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/Upload";
+                var httpClient = new HttpClient();
 
-            var httpResponseMessage = await httpClient.PostAsync(uploadServiceBaseAddress, content);
+                var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/Upload";
 
-            var blobPathInfo = await httpResponseMessage.Content.ReadAsStringAsync();
-            var unQuotedblobPathInfo = blobPathInfo.TrimStart('"').TrimEnd('"');
-            // If the characters are the same, then you only need one call to Trim('"'):
-            unQuotedblobPathInfo = blobPathInfo.Trim('"');
-            UpdateSenderInfo(unQuotedblobPathInfo);
+                var httpResponseMessage = await httpClient.PostAsync(uploadServiceBaseAddress, content);
+
+                var blobPathInfo = await httpResponseMessage.Content.ReadAsStringAsync();
+                var unQuotedblobPathInfo = blobPathInfo.TrimStart('"').TrimEnd('"');
+                // If the characters are the same, then you only need one call to Trim('"'):
+                unQuotedblobPathInfo = blobPathInfo.Trim('"');
+                UpdateSenderInfo(unQuotedblobPathInfo);
+            }
+            else
+            {
+                lblMessage.Text = "Your image still generating... Please wait a moment...";
+            }
         }
 
         private async void UpdateSenderInfo(string blobPathInfo)
@@ -120,11 +109,13 @@ namespace UploadToServer
                 response = await client.PostAsync(uploadServiceBaseAddress, content);
                 if (response.IsSuccessStatusCode)
                 {
-                    DisplayAlert("success", "success", "ok");
+                    //DisplayAlert("Upload successfully....", "success", "ok");
+                    lblMessage.Text = "Upload successfully";
                 }
                 else
                 {
-                    DisplayAlert("failed", "failed", "ok");
+                    //DisplayAlert("Failed to upload...", "failed", "ok");
+                    lblMessage.Text = "Upload successfully";
                 }
             }
             catch (Exception ex)
@@ -242,6 +233,8 @@ namespace UploadToServer
                 return;
             }
 
+            lblMessage.Text = "Generating Video...";
+
             _mediaFile = await CrossMedia.Current.TakeVideoAsync(new StoreVideoOptions
             {
                 Directory = "DefaultVideos",
@@ -251,7 +244,9 @@ namespace UploadToServer
             if (_mediaFile == null)
                 return;
 
-            LocalPathLabel.Text = _mediaFile.Path;
+            lblMessage.Text = "Ready to go";
+
+            //LocalPathLabel.Text = _mediaFile.Path;
 
             FileImage.Source = ImageSource.FromStream(() =>
             {

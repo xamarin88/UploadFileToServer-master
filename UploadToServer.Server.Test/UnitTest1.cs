@@ -61,8 +61,6 @@ namespace UploadToServer.Server.Test
             byte[] toBytes = File.ReadAllBytes("D:\\myImage_18.jpg");
             String s = Convert.ToBase64String(toBytes);
 
-            //byte[] toBytes = Encoding.ASCII.GetBytes("aaa");
-
             var obj1 = new Image
             {
                 imageData = s,
@@ -82,24 +80,17 @@ namespace UploadToServer.Server.Test
             {
                 Properties = { { HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration() } }
             };
-
-            //byte[] toBytes = File.ReadAllBytes("D:\\images.jpg");
+            
             byte[] toBytes = File.ReadAllBytes("D:\\myImage_18.jpg");
             String s = Convert.ToBase64String(toBytes);
-
-            //byte[] aaa = Encoding.UTF8.GetBytes("sssss");
-            //String bbb = Convert.ToBase64String(aaa);
 
             var obj1 = new Image
             {
                 imageData = s,
-                //imageData = bbb,
                 filename = "test2",
                 senderID = Guid.NewGuid(),
             };
 
-
-            //1st approach
             var client = new HttpClient();
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj1);
@@ -110,53 +101,7 @@ namespace UploadToServer.Server.Test
 
             HttpResponseMessage response = null;
             response = await client.PostAsync(uploadServiceBaseAddress, content);
-
-            ////2nd approach
-            //var client = new HttpClient();
-            //var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/UploadMedia2";
-            //string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj1, Formatting.Indented);
-
-            //var buffer = System.Text.Encoding.UTF8.GetBytes(json);
-
-            //var byteContent = new ByteArrayContent(buffer);
-
-            //byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            //var httpResponce = client.PostAsync(uploadServiceBaseAddress, byteContent).Result;
+          
         }
-
-        [TestMethod]
-        public void TestMethod4()
-        {
-            //var quotedString = "\"hello\"";
-            //var unQuotedString = quotedString.TrimStart('"').TrimEnd('"');
-
-            //// If the characters are the same, then you only need one call to Trim('"'):
-            //unQuotedString = quotedString.Trim('"');
-
-            //Console.WriteLine(quotedString);
-            //Console.WriteLine(unQuotedString);
-
-            String value = "http:\\asdasdad.asdasdjk.asdasdasdjklj\\image.jpg";
-            //Char delimiter = '.';
-            //String[] substrings = value.Split(delimiter);
-            //foreach (var substring in substrings)
-            //    Console.WriteLine(substring);
-
-            string lastPart = value.Split('.').Last();
-            Console.WriteLine(lastPart);
-        }
-        //[TestMethod]
-        //public async Task get()
-        //{
-        //    UploadsController controller = new UploadsController();
-
-        //    controller.Request = new HttpRequestMessage()
-        //    {
-        //        Properties = { { HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration() } }
-        //    };
-
-        //    var result = await controller.GetStoredProcedure("dbo.MediaDetailsIns");
-        //}
     }
 }
