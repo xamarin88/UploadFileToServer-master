@@ -31,8 +31,7 @@
         Clicked="TakeVideo_Clicked"/>
 
         <Image x:Name="FileImage"
-           WidthRequest="400"
-           HeightRequest="220"/>
+           HeightRequest="399"/>
 
     <Label x:Name="LocalPathLabel"
            TextColor="Black"
@@ -48,7 +47,7 @@
         BackgroundColor="Purple"
         TextColor="White"
         FontSize="40"
-        Clicked="UploadFile_Clicked"/>
+        Clicked="UploadFile2_Clicked"/>
 
     <Label x:Name="RemotePathLabel"
            FontSize="20"

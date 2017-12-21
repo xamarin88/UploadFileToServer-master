@@ -114,7 +114,7 @@ namespace UploadToServer
                         string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj1);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-
+                        //to do upload to blob storage
 
                         ////1st approach
                         //var result = client.PostAsync(uploadServiceBaseAddress, content).Result;
@@ -136,8 +136,6 @@ namespace UploadToServer
                         {
                             DisplayAlert("failed", "failed", "ok");
                         }
-
-                        
                     }
                 }
 
@@ -177,6 +175,21 @@ namespace UploadToServer
                 DisplayAlert("An error occurred: '{0}'", ex.Message, "ok");
             }
            
+        }
+
+        private async void UploadFile2_Clicked(object sender, EventArgs e)
+        {
+            var content = new MultipartFormDataContent();
+
+            content.Add(new StreamContent(_mediaFile.GetStream()),
+               "\"file\"",
+               $"\"{_mediaFile.Path}\"");
+
+            var httpClient = new HttpClient();
+
+            var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/Upload2";
+
+            var httpResponseMessage = await httpClient.PostAsync(uploadServiceBaseAddress, content);
         }
 
         private async void TakeVideo_Clicked(object sender, EventArgs e)
