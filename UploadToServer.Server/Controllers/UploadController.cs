@@ -12,11 +12,43 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.IO;
+using System.Configuration;
 
 namespace UploadToServer.Server.Controllers
 {
     public class UploadsController : ApiController
     {
+        //[Route("api/Files/Upload")]
+        //public async Task<string> Post()
+        //{
+        //    try
+        //    {
+        //        var httpRequest = HttpContext.Current.Request;
+
+        //        if (httpRequest.Files.Count > 0)
+        //        {
+        //            foreach (string file in httpRequest.Files)
+        //            {
+        //                var postedFile = httpRequest.Files[file];
+
+        //                var fileName = postedFile.FileName.Split('\\').LastOrDefault().Split('/').LastOrDefault();
+
+        //                var filePath = HttpContext.Current.Server.MapPath("~/Uploads/" + fileName);
+
+        //                postedFile.SaveAs(filePath);
+
+        //                return "/Uploads/" + fileName;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        return exception.Message;
+        //    }
+
+        //    return "no files";
+        //}
+
         [Route("api/Files/Upload")]
         public async Task<string> Post()
         {
@@ -26,63 +58,15 @@ namespace UploadToServer.Server.Controllers
 
                 if (httpRequest.Files.Count > 0)
                 {
-                    foreach (string file in httpRequest.Files)
-                    {
-                        var postedFile = httpRequest.Files[file];
-
-                        var fileName = postedFile.FileName.Split('\\').LastOrDefault().Split('/').LastOrDefault();
-
-                        var filePath = HttpContext.Current.Server.MapPath("~/Uploads/" + fileName);
-
-                        postedFile.SaveAs(filePath);
-
-                        return "/Uploads/" + fileName;
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                return exception.Message;
-            }
-
-            return "no files";
-        }
-
-        [Route("api/Files/Upload2")]
-        public async Task<string> Post2()
-        {
-            try
-            {
-                var httpRequest = HttpContext.Current.Request;
-
-                if (httpRequest.Files.Count > 0)
-                {
-                    //string accountname = "uploadmediatoserverstore";
-
-                    //string accesskey = "F2rmquz19Rm5fzWLWSuEOgfu+UPvjoWxMdPlsuWhL6+MVfpaSv5TxlRukV/uIMZGkS8Wuw7IljhtMoQ6J6ozqw==";
-
-                    //string connectionString = "DefaultEndpointsProtocol=https;AccountName=uploadmediatoserverstore;AccountKey=F2rmquz19Rm5fzWLWSuEOgfu+UPvjoWxMdPlsuWhL6+MVfpaSv5TxlRukV/uIMZGkS8Wuw7IljhtMoQ6J6ozqw==;EndpointSuffix=core.windows.net";
-
-                    //string localPath = "";
-
-
-                    //var accountName = "uploadmediatoserverstore";
-                    //var accountKey = "F2rmquz19Rm5fzWLWSuEOgfu+UPvjoWxMdPlsuWhL6+MVfpaSv5TxlRukV/uIMZGkS8Wuw7IljhtMoQ6J6ozqw==";
-                    //var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
-
-                    //CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-                    //CloudBlobContainer container = blobClient.GetContainerReference("images");
-
-                    //container.CreateIfNotExists();
-                    
-
-                    CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=uploadmediatoserverstore;AccountKey=F2rmquz19Rm5fzWLWSuEOgfu+UPvjoWxMdPlsuWhL6+MVfpaSv5TxlRukV/uIMZGkS8Wuw7IljhtMoQ6J6ozqw==;EndpointSuffix=core.windows.net");
+                    CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["BlobStorageConnectionString"]);
+                    //CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=uploadmediatoserverstore;AccountKey=F2rmquz19Rm5fzWLWSuEOgfu+UPvjoWxMdPlsuWhL6+MVfpaSv5TxlRukV/uIMZGkS8Wuw7IljhtMoQ6J6ozqw==;EndpointSuffix=core.windows.net");
 
                     // Create the blob client.
                     CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
                     // Retrieve a reference to a container.
-                    CloudBlobContainer container = blobClient.GetContainerReference("images");
+                    //CloudBlobContainer container = blobClient.GetContainerReference("images");
+                    CloudBlobContainer container = blobClient.GetContainerReference(ConfigurationManager.AppSettings["ImagesContainer"]);
 
                     container.CreateIfNotExists();
 
@@ -104,56 +88,6 @@ namespace UploadToServer.Server.Controllers
                         stream.Dispose();
                         return blockBlob?.Uri.ToString();
                     }
-
-
-
-                    
-
-
-
-                    //foreach (string file in httpRequest.Files)
-                    //{
-                    //    HttpPostedFile image = file;
-
-                    //    using (file.InputStream)
-                    //    {
-                    //        blockBlob.UploadFromStream(image.InputStream);
-                    //        byte[] fileData = null;
-                    //        using (var binaryReader = new BinaryReader(image.InputStream))
-                    //        {
-                    //            fileData = binaryReader.ReadBytes(image.ContentLength);
-                    //        }
-                    //        string base64ImageRepresentation = Convert.ToBase64String(fileData);
-
-                    //        // Clear and send the response back to the browser.
-                    //        string json = "";
-                    //        Hashtable resp = new Hashtable();
-                    //        resp.Add("link", "data:image/" + System.IO.Path.GetExtension(image.FileName).Replace(@".", "") + ";base64," + base64ImageRepresentation);
-                    //        resp.Add("imgID", "BLOB/" + fileName);
-                    //        json = JsonConvert.SerializeObject(resp);
-                    //        Response.Clear();
-                    //        Response.ContentType = "application/json; charset=utf-8";
-                    //        Response.Write(json);
-                    //        Response.End();
-                    //    }
-                    //}
-
-
-
-                    //foreach (string file in httpRequest.Files)
-                    //{
-                    //    var postedFile = httpRequest.Files[file];
-
-                    //    var fileName = postedFile.FileName.Split('\\').LastOrDefault().Split('/').LastOrDefault();
-
-                    //    CloudBlockBlob blob = container.GetBlockBlobReference(fileName);
-                    //    blob.UploadFromStream()
-                    //    //var filePath = HttpContext.Current.Server.MapPath("~/Uploads/" + fileName);
-
-                    //    //postedFile.SaveAs(filePath);
-
-                    //    //return "/Uploads/" + fileName;
-                    //}
                 }
             }
             catch (Exception exception)
@@ -164,6 +98,7 @@ namespace UploadToServer.Server.Controllers
             return "no files";
         }
 
+        //need to use PostMedia2 (this one is initial one)
         [Route("api/Files/UploadMedia")]
         public async Task<string> PostMedia(Image image)
         {
@@ -174,7 +109,8 @@ namespace UploadToServer.Server.Controllers
 
                 var connectionString = string.Empty;
                 var json = string.Empty;
-                connectionString = "Server=tcp:uploadtoserver.database.windows.net,1433;Initial Catalog=UploadFileDB;Persist Security Info=False;User ID=uploadtoserveradmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=90;";
+                //connectionString = "Server=tcp:uploadtoserver.database.windows.net,1433;Initial Catalog=UploadFileDB;Persist Security Info=False;User ID=uploadtoserveradmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=90;";
+                connectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
                 conn = new SqlConnection(connectionString);
                 command = new SqlCommand("MediaDetailsIns", conn);
@@ -220,7 +156,8 @@ namespace UploadToServer.Server.Controllers
 
                 var connectionString = string.Empty;
                 var json = string.Empty;
-                connectionString = "Server=tcp:uploadtoserver.database.windows.net,1433;Initial Catalog=UploadFileDB;Persist Security Info=False;User ID=uploadtoserveradmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=90;";
+                //connectionString = "Server=tcp:uploadtoserver.database.windows.net,1433;Initial Catalog=UploadFileDB;Persist Security Info=False;User ID=uploadtoserveradmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=90;";
+                connectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
                 conn = new SqlConnection(connectionString);
                 command = new SqlCommand("MediaDetailsIns2", conn);
@@ -251,6 +188,55 @@ namespace UploadToServer.Server.Controllers
             }
             return "upload failed";
         }
+
+        [Route("api/Files/UpdateBlobData")]
+        public async Task<string> PostBlobData(BlobData blobData)
+        {
+            try
+            {
+                SqlConnection conn = null;
+                SqlCommand command = null;
+                
+                var connectionString = string.Empty;
+                var json = string.Empty;
+                connectionString = ConfigurationManager.AppSettings["ConnectionString"];
+
+                conn = new SqlConnection(connectionString);
+                command = new SqlCommand("BlobStorageIns", conn);
+                command.CommandTimeout = 0;
+
+                command.CommandType = CommandType.StoredProcedure;
+                conn.Open();
+
+                command.Parameters.Add("@filePath", SqlDbType.VarChar, 255);
+                command.Parameters.Add("@fileExt", SqlDbType.VarChar, 10);
+                command.Parameters.Add("@senderNumber", SqlDbType.VarChar, 30);
+                command.Parameters.Add("@senderLoc", SqlDbType.Decimal);
+                command.Parameters.Add("@createdOn", SqlDbType.DateTime);
+
+                command.Parameters["@filePath"].Value = blobData.filePath;
+                command.Parameters["@fileExt"].Value = blobData.fileExt;
+                command.Parameters["@senderNumber"].Value = blobData.senderNumber;
+                command.Parameters["@senderLoc"].Value = blobData.senderLoc;
+                command.Parameters["@createdOn"].Value = DateTime.UtcNow;
+
+                command.ExecuteNonQuery();
+
+                conn.Close();
+                conn.Dispose();
+
+                HttpResponseMessage response = Request.CreateResponse<BlobData>(HttpStatusCode.Created, blobData);
+                return response.StatusCode.ToString();
+            }
+            catch (Exception exception)
+            {
+                return exception.Message;
+            }
+
+            return "upload failed";
+        }
+       
+
 
         //[Route("api/Files/GetStoredProcedure")]
         //public async Task<string> GetStoredProcedure(string spname)

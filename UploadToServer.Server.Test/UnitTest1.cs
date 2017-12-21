@@ -46,10 +46,6 @@ namespace UploadToServer.Server.Test
             };
 
             var result = await controller.PostMedia(obj1);
-
-            //await response = controller.PostMedia(obj1);
-            //HttpResponseMessage response = await controller.PostMedia(obj1);
-            //Assert.IsTrue(response.TryGetContentValue<Image>(out obj1));
         }
 
         [TestMethod]
@@ -75,10 +71,6 @@ namespace UploadToServer.Server.Test
             };
 
             var result = await controller.PostMedia2(obj1);
-
-            //await response = controller.PostMedia(obj1);
-            //HttpResponseMessage response = await controller.PostMedia(obj1);
-            //Assert.IsTrue(response.TryGetContentValue<Image>(out obj1));
         }
 
         [TestMethod]
@@ -119,10 +111,6 @@ namespace UploadToServer.Server.Test
             HttpResponseMessage response = null;
             response = await client.PostAsync(uploadServiceBaseAddress, content);
 
-
-            
-
-
             ////2nd approach
             //var client = new HttpClient();
             //var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/UploadMedia2";
@@ -135,12 +123,29 @@ namespace UploadToServer.Server.Test
             //byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             //var httpResponce = client.PostAsync(uploadServiceBaseAddress, byteContent).Result;
-
-
-
-
         }
 
+        [TestMethod]
+        public void TestMethod4()
+        {
+            //var quotedString = "\"hello\"";
+            //var unQuotedString = quotedString.TrimStart('"').TrimEnd('"');
+
+            //// If the characters are the same, then you only need one call to Trim('"'):
+            //unQuotedString = quotedString.Trim('"');
+
+            //Console.WriteLine(quotedString);
+            //Console.WriteLine(unQuotedString);
+
+            String value = "http:\\asdasdad.asdasdjk.asdasdasdjklj\\image.jpg";
+            //Char delimiter = '.';
+            //String[] substrings = value.Split(delimiter);
+            //foreach (var substring in substrings)
+            //    Console.WriteLine(substring);
+
+            string lastPart = value.Split('.').Last();
+            Console.WriteLine(lastPart);
+        }
         //[TestMethod]
         //public async Task get()
         //{

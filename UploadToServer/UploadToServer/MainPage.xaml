@@ -47,7 +47,7 @@
         BackgroundColor="Purple"
         TextColor="White"
         FontSize="40"
-        Clicked="UploadFile2_Clicked"/>
+        Clicked="UploadFile_Clicked"/>
 
     <Label x:Name="RemotePathLabel"
            FontSize="20"
