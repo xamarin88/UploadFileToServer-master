@@ -11,7 +11,8 @@ namespace UploadToServer.Server.Models
         public string filePath { get; set; }
         public string fileExt { get; set; }
         public string senderNumber { get; set; }
-        public decimal senderLoc { get; set; }
+        public decimal senderLat { get; set; }
+        public decimal senderLong { get; set; }
         public DateTime createdOn { get; set; }
     }
 }

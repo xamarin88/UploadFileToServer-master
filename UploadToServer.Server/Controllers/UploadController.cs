@@ -162,6 +162,7 @@ namespace UploadToServer.Server.Controllers
                 var connectionString = string.Empty;
                 var json = string.Empty;
                 connectionString = ConfigurationManager.AppSettings["ConnectionString"];
+                //connectionString = "Server=tcp:uploadtoserver.database.windows.net,1433;Initial Catalog=UploadFileDB;Persist Security Info=False;User ID=uploadtoserveradmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=90;";
 
                 conn = new SqlConnection(connectionString);
                 command = new SqlCommand("BlobStorageIns", conn);
@@ -173,13 +174,15 @@ namespace UploadToServer.Server.Controllers
                 command.Parameters.Add("@filePath", SqlDbType.VarChar, 255);
                 command.Parameters.Add("@fileExt", SqlDbType.VarChar, 10);
                 command.Parameters.Add("@senderNumber", SqlDbType.VarChar, 30);
-                command.Parameters.Add("@senderLoc", SqlDbType.Decimal);
+                command.Parameters.Add("@senderLat", SqlDbType.Decimal);
+                command.Parameters.Add("@senderLong", SqlDbType.Decimal);
                 command.Parameters.Add("@createdOn", SqlDbType.DateTime);
 
                 command.Parameters["@filePath"].Value = blobData.filePath;
                 command.Parameters["@fileExt"].Value = blobData.fileExt;
                 command.Parameters["@senderNumber"].Value = blobData.senderNumber;
-                command.Parameters["@senderLoc"].Value = blobData.senderLoc;
+                command.Parameters["@senderLat"].Value = blobData.senderLat;
+                command.Parameters["@senderLong"].Value = blobData.senderLong;
                 command.Parameters["@createdOn"].Value = DateTime.UtcNow;
 
                 command.ExecuteNonQuery();

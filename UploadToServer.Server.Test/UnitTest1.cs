@@ -103,5 +103,43 @@ namespace UploadToServer.Server.Test
             response = await client.PostAsync(uploadServiceBaseAddress, content);
           
         }
+
+        [TestMethod]
+        public async Task TestMethod4()
+        {
+            UploadsController controller = new UploadsController();
+
+            controller.Request = new HttpRequestMessage()
+            {
+                Properties = { { HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration() } }
+            };
+
+            //byte[] toBytes = File.ReadAllBytes("D:\\myImage_18.jpg");
+            //String s = Convert.ToBase64String(toBytes);
+            
+            var obj1 = new Models.BlobData
+            {
+
+                filePath = "a",
+                fileExt = "xxx",
+                senderNumber = "sender",
+                senderLat = System.Convert.ToDecimal(1),
+                senderLong = System.Convert.ToDecimal(2),
+            };
+
+            var result = await controller.PostBlobData(obj1);
+
+            //var client = new HttpClient();
+
+            //string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj1);
+
+            //var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            //var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/PostBlobData";
+
+            //HttpResponseMessage response = null;
+            //response = await client.PostAsync(uploadServiceBaseAddress, content);
+
+        }
     }
 }
