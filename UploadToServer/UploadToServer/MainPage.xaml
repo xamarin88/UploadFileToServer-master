@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:UploadToServer"
              x:Class="UploadToServer.MainPage"
              BackgroundColor="White">
-    
+
     <ScrollView>
         <StackLayout Spacing="10" Padding="10, 5, 10, 5">
             <Label Text="Upload File to Server" HorizontalOptions="Center" TextColor="Black" FontSize="36"/>

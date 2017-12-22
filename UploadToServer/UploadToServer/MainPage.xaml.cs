@@ -10,6 +10,7 @@ using System.IO;
 using PCLStorage;
 using System.Net.Http.Headers;
 using System.Linq;
+using Xamarin.Forms.Xaml;
 
 namespace UploadToServer
 {
