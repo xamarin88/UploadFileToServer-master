@@ -15,6 +15,8 @@ namespace UploadToServer
     {
         private MediaFile _mediaFile;
         Position savedPosition;
+        decimal latitude = 0;
+        decimal longitude = 0;
 
         public MainPage()
         {
@@ -30,6 +32,8 @@ namespace UploadToServer
                 await DisplayAlert("No Camera", ":( No camera available.", "OK");
                 return;
             }
+
+            GetGPS();
 
             lblMessage.Text = "Generating Photo...";
 
@@ -63,6 +67,8 @@ namespace UploadToServer
                 await DisplayAlert("No Camera", ":( No camera available.", "OK");
                 return;
             }
+
+            GetGPS();
 
             lblMessage.Text = "Generating Video...";
 
@@ -119,8 +125,8 @@ namespace UploadToServer
         {
             try
             {
-                GetGPS();
-                
+                //GetGPS();
+
                 //var obj = new Models.BlobData
                 //{
 
@@ -137,8 +143,8 @@ namespace UploadToServer
                     filePath = blobPathInfo,
                     fileExt = blobPathInfo.Split('.').Last(),
                     senderNumber = blobPathInfo,
-                    senderLat = System.Convert.ToDecimal(savedPosition.Latitude),
-                    senderLong = System.Convert.ToDecimal(savedPosition.Longitude),
+                    senderLat = latitude,
+                    senderLong = longitude,
                 };
 
                 var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/UpdateBlobData";
@@ -177,7 +183,7 @@ namespace UploadToServer
                 locator.DesiredAccuracy = 500;
                 labelGPS.Text = "Getting gps...";
                 
-                var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null, false);
+                var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(30), null, false);
                 if (position == null)
                 {
                     savedPosition = null;
@@ -189,6 +195,8 @@ namespace UploadToServer
                     savedPosition = position;
                     labelGPS.Text = string.Format("Time: {0} \nLat: {1} \nLong: {2} \nAltitude: {3}",
                         position.Timestamp, position.Latitude, position.Longitude, position.Altitude);
+                    latitude = System.Convert.ToDecimal(position.Latitude);
+                    longitude = System.Convert.ToDecimal(position.Longitude);
                     //labelGPS.Text = string.Format("Time: {0} \nLat: {1} \nLong: {2} \nAltitude: {3} \nAltitude Accuracy: {4} \nAccuracy: {5} \nHeading: {6} \nSpeed: {7}",
                     //    position.Timestamp, position.Latitude, position.Longitude,
                     //    position.Altitude, position.AltitudeAccuracy, position.Accuracy, position.Heading, position.Speed);

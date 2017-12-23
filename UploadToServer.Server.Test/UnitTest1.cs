@@ -139,7 +139,6 @@ namespace UploadToServer.Server.Test
 
             //HttpResponseMessage response = null;
             //response = await client.PostAsync(uploadServiceBaseAddress, content);
-
         }
     }
 }
