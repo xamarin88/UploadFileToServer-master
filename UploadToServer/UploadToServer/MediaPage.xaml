@@ -10,6 +10,6 @@
             <Label x:Name="sourcePath"></Label>
             <Button x:Name="uploadFile" Text="Upload" Clicked="UploadFile_Clicked"/>
             <Label x:Name="RemotePathLabel"></Label>
-        </StackLayout>
+        </StackLayout> 
     </ScrollView>
 </ContentPage>

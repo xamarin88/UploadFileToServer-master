@@ -7,7 +7,9 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace UploadToServer
 {
@@ -17,6 +19,9 @@ namespace UploadToServer
         Position savedPosition;
         decimal latitude = 0;
         decimal longitude = 0;
+        string filename;
+        string fileExt;
+        string filePath;
 
         public MainPage()
         {
@@ -51,6 +56,9 @@ namespace UploadToServer
             lblMessage.Text = "Ready to go";
 
             //LocalPathLabel.Text = _mediaFile.Path;
+            filename = _mediaFile.Path.Split('\\').LastOrDefault().Split('/').LastOrDefault();
+            fileExt = _mediaFile.Path.Split('.').Last();
+            filePath = Constants.ImageRootPath + "/" + filename;
 
             FileImage.Source = ImageSource.FromStream(() =>
             {
@@ -84,6 +92,9 @@ namespace UploadToServer
             lblMessage.Text = "Ready to go";
 
             //LocalPathLabel.Text = _mediaFile.Path;
+            filename = _mediaFile.Path.Split('\\').LastOrDefault().Split('/').LastOrDefault();
+            fileExt = _mediaFile.Path.Split('.').Last();
+            filePath = Constants.ImageRootPath + "/" + filename;
 
             FileImage.Source = ImageSource.FromStream(() =>
             {
@@ -95,7 +106,19 @@ namespace UploadToServer
         {
             if (lblMessage.Text == "Ready to go")
             {
-                savedPosition = null;
+                await UpdateAzureStorage();
+                await UpdateSenderInfo();
+            }
+            else
+            {
+                lblMessage.Text = "Your image still generating... Please wait a moment...";
+            }
+        }
+
+        private async Task UpdateAzureStorage()
+        {
+            try
+            {
                 lblMessage.Text = "Uploading...";
 
                 var content = new MultipartFormDataContent();
@@ -105,44 +128,26 @@ namespace UploadToServer
                    $"\"{_mediaFile.Path}\"");
 
                 var httpClient = new HttpClient();
-
                 var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/Upload";
-
                 var httpResponseMessage = await httpClient.PostAsync(uploadServiceBaseAddress, content);
-                var blobPathInfo = await httpResponseMessage.Content.ReadAsStringAsync();
-                var unQuotedblobPathInfo = blobPathInfo.TrimStart('"').TrimEnd('"');
-                // If the characters are the same, then you only need one call to Trim('"'):
-                unQuotedblobPathInfo = blobPathInfo.Trim('"');
-                UpdateSenderInfo(unQuotedblobPathInfo);
             }
-            else
+            catch (Exception ex)
             {
-                lblMessage.Text = "Your image still generating... Please wait a moment...";
+                lblMessage.Text = string.Format("Storage:An error occurred:: {0} \n",ex.Message);
+                DisplayAlert("Storage:An error occurred: '{0}'", ex.Message, "ok");
             }
         }
 
-        private async void UpdateSenderInfo(string blobPathInfo)
+        private async Task UpdateSenderInfo()
         {
             try
             {
-                //GetGPS();
-
-                //var obj = new Models.BlobData
-                //{
-
-                //    filePath = blobPathInfo,
-                //    fileExt = blobPathInfo.Split('.').Last(),
-                //    senderNumber = blobPathInfo,
-                //    senderLat = System.Convert.ToDecimal(savedPosition.Latitude),
-                //    senderLong = System.Convert.ToDecimal(savedPosition.Longitude),
-                //};
-
                 var obj = new Models.BlobData
                 {
 
-                    filePath = blobPathInfo,
-                    fileExt = blobPathInfo.Split('.').Last(),
-                    senderNumber = blobPathInfo,
+                    filePath = filePath,
+                    fileExt = fileExt,
+                    senderNumber = filePath,
                     senderLat = latitude,
                     senderLong = longitude,
                 };
@@ -167,9 +172,90 @@ namespace UploadToServer
             }
             catch (Exception ex)
             {
-                DisplayAlert("An error occurred: '{0}'", ex.Message, "ok");
+                lblMessage.Text = string.Format("DB:An error occurred:: {0} \n", ex.Message);
+                DisplayAlert("DB:An error occurred: '{0}'", ex.Message, "ok");
             }
         }
+
+        //private async void UploadFile_Clicked(object sender, EventArgs e)
+        //{
+        //    if (lblMessage.Text == "Ready to go")
+        //    {
+        //        savedPosition = null;
+        //        lblMessage.Text = "Uploading...";
+
+        //        var content = new MultipartFormDataContent();
+
+        //        content.Add(new StreamContent(_mediaFile.GetStream()),
+        //           "\"file\"",
+        //           $"\"{_mediaFile.Path}\"");
+
+        //        var httpClient = new HttpClient();
+
+        //        var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/Upload";
+
+        //        var httpResponseMessage = await httpClient.PostAsync(uploadServiceBaseAddress, content);
+        //        var blobPathInfo = await httpResponseMessage.Content.ReadAsStringAsync();
+        //        var unQuotedblobPathInfo = blobPathInfo.TrimStart('"').TrimEnd('"');
+        //        // If the characters are the same, then you only need one call to Trim('"'):
+        //        unQuotedblobPathInfo = blobPathInfo.Trim('"');
+        //        UpdateSenderInfo(unQuotedblobPathInfo);
+        //    }
+        //    else
+        //    {
+        //        lblMessage.Text = "Your image still generating... Please wait a moment...";
+        //    }
+        //}
+
+        //private async void UpdateSenderInfo(string blobPathInfo)
+        //{
+        //    try
+        //    {
+        //        //GetGPS();
+
+        //        //var obj = new Models.BlobData
+        //        //{
+
+        //        //    filePath = blobPathInfo,
+        //        //    fileExt = blobPathInfo.Split('.').Last(),
+        //        //    senderNumber = blobPathInfo,
+        //        //    senderLat = System.Convert.ToDecimal(savedPosition.Latitude),
+        //        //    senderLong = System.Convert.ToDecimal(savedPosition.Longitude),
+        //        //};
+
+        //        var obj = new Models.BlobData
+        //        {
+
+        //            filePath = blobPathInfo,
+        //            fileExt = blobPathInfo.Split('.').Last(),
+        //            senderNumber = blobPathInfo,
+        //            senderLat = latitude,
+        //            senderLong = longitude,
+        //        };
+
+        //        var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/UpdateBlobData";
+
+        //        var client = new HttpClient();
+        //        string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+        //        var content = new StringContent(json, Encoding.Unicode, "application/json");
+        //        HttpResponseMessage response = null;
+        //        response = await client.PostAsync(uploadServiceBaseAddress, content);
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            //DisplayAlert("Upload successfully....", "success", "ok");
+        //            lblMessage.Text = "Upload successfully";
+        //        }
+        //        else
+        //        {
+        //            //DisplayAlert("Failed to upload...", "failed", "ok");
+        //            lblMessage.Text = "Upload Failed";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        DisplayAlert("An error occurred: '{0}'", ex.Message, "ok");
+        //    }
+        //}
 
         private async void GetGPS()
         {

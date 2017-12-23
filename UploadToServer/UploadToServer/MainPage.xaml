@@ -10,7 +10,7 @@
             <Label Text="Upload File to Server" HorizontalOptions="Center" TextColor="Black" FontSize="36"/>
             <Button x:Name="takePhoto" Text="Take Photo" BackgroundColor="Navy" TextColor="White" Clicked="TakePhoto_Clicked"/>
             <Button x:Name="takeVideo" Text="Take Video" BackgroundColor="Teal" TextColor="White" Clicked="TakeVideo_Clicked"/>
-            <!--<Image x:Name="FileImage" HeightRequest="360"/>-->
+            <!--<Image x:Name="FileImage" HeightRequest="360"/>--> 
             <Image x:Name="FileImage" HeightRequest="300"/>
             <Label x:Name="lblMessage" TextColor="Black" FontSize="14" IsVisible="True"/>
             <Button x:Name="uploaPhoto" Text="Upload Photo" BackgroundColor="Purple" TextColor="White" Clicked="UploadFile_Clicked"/>
