@@ -128,13 +128,24 @@ namespace UploadToServer
                    $"\"{_mediaFile.Path}\"");
 
                 var httpClient = new HttpClient();
+                httpClient.Timeout = TimeSpan.FromMinutes(3);
                 var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/Upload";
                 var httpResponseMessage = await httpClient.PostAsync(uploadServiceBaseAddress, content);
             }
-            catch (Exception ex)
+            //catch (Exception ex)
+            //{
+            //    lblMessage.Text = string.Format("Storage:An error occurred:: {0} \n",ex.Message);
+            //    DisplayAlert("Storage:An error occurred: '{0}'", ex.Message, "ok");
+            //}
+            catch (HttpRequestException ex)
             {
-                lblMessage.Text = string.Format("Storage:An error occurred:: {0} \n",ex.Message);
-                DisplayAlert("Storage:An error occurred: '{0}'", ex.Message, "ok");
+                lblMessage.Text = string.Format("HttpRequestException Storage:An error occurred:: {0} \n", ex.Message);
+                DisplayAlert("HttpRequestException Storage:An error occurred: '{0}'", ex.Message, "ok");
+            }
+            catch (TimeoutException ex2)
+            {
+                lblMessage.Text = string.Format("HttpRequestException Storage:An error occurred:: {0} \n", ex2.Message);
+                DisplayAlert("HttpRequestException Storage:An error occurred: '{0}'", ex2.Message, "ok");
             }
         }
 
@@ -155,6 +166,7 @@ namespace UploadToServer
                 var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/UpdateBlobData";
 
                 var client = new HttpClient();
+                client.Timeout = TimeSpan.FromMinutes(3);
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
                 var content = new StringContent(json, Encoding.Unicode, "application/json");
                 HttpResponseMessage response = null;
@@ -170,10 +182,15 @@ namespace UploadToServer
                     lblMessage.Text = "Upload Failed";
                 }
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
-                lblMessage.Text = string.Format("DB:An error occurred:: {0} \n", ex.Message);
-                DisplayAlert("DB:An error occurred: '{0}'", ex.Message, "ok");
+                lblMessage.Text = string.Format("HttpRequestException DB:An error occurred:: {0} \n", ex.Message);
+                DisplayAlert("HttpRequestException DB:An error occurred: '{0}'", ex.Message, "ok");
+            }
+            catch (TimeoutException ex2)
+            {
+                lblMessage.Text = string.Format("HttpRequestException DB:An error occurred:: {0} \n", ex2.Message);
+                DisplayAlert("HttpRequestException DB:An error occurred: '{0}'", ex2.Message, "ok");
             }
         }
 
