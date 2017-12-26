@@ -113,9 +113,6 @@ namespace UploadToServer.Server.Test
             {
                 Properties = { { HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration() } }
             };
-
-            //byte[] toBytes = File.ReadAllBytes("D:\\myImage_18.jpg");
-            //String s = Convert.ToBase64String(toBytes);
             
             var obj1 = new Models.BlobData
             {
@@ -128,17 +125,6 @@ namespace UploadToServer.Server.Test
             };
 
             var result = await controller.PostBlobData(obj1);
-
-            //var client = new HttpClient();
-
-            //string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj1);
-
-            //var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            //var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/PostBlobData";
-
-            //HttpResponseMessage response = null;
-            //response = await client.PostAsync(uploadServiceBaseAddress, content);
         }
     }
 }

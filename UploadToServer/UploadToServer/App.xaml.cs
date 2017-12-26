@@ -15,7 +15,6 @@ namespace UploadToServer
             InitializeComponent();
 
             MainPage = new UploadToServer.MainPage();
-            //MainPage = new UploadToServer.MediaPage();
         }
 
         protected override void OnStart()

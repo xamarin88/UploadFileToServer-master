@@ -104,7 +104,6 @@ namespace UploadToServer.Server.Controllers
             {
                 return exception.Message;
             }
-            return "upload failed";
         }
 
         [Route("api/Files/UploadMedia2")]
@@ -148,7 +147,6 @@ namespace UploadToServer.Server.Controllers
             {
                 return exception.Message;
             }
-            return "upload failed";
         }
 
         [Route("api/Files/UpdateBlobData")]
