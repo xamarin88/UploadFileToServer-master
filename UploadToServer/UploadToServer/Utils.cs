@@ -17,9 +17,10 @@ namespace UploadToServer
             bool request = false;
             if (permissionStatus == PermissionStatus.Denied)
             {
-                //if (Device.RuntimePlatform == Device.iOS)
-                //{
 
+                //if (Device.RuntimePlatform == Device.iOS)
+                //if (Device.OS == TargetPlatform.iOS)
+                //{
                 //    var title = $"{permission} Permission";
                 //    var question = $"To use this plugin the {permission} permission is required. Please go into Settings and turn on {permission} for the app.";
                 //    var positive = "Settings";
@@ -38,7 +39,6 @@ namespace UploadToServer
                 //}
 
                 request = true;
-
             }
 
             if (request || permissionStatus != PermissionStatus.Granted)

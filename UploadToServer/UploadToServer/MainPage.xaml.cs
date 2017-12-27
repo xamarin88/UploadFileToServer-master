@@ -2,8 +2,13 @@
 using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
+using Plugin.MediaManager;
+using Plugin.MediaManager.Abstractions;
+using Plugin.MediaManager.Abstractions.Enums;
+using Plugin.MediaManager.Abstractions.EventArguments;
 using Plugin.Permissions.Abstractions;
 using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -22,6 +27,10 @@ namespace UploadToServer
         string filename;
         string fileExt;
         string filePath;
+        string oriPath;
+        string locAddress;
+
+        //private IPlaybackController PlaybackController => CrossMediaManager.Current.PlaybackController;
 
         public MainPage()
         {
@@ -53,8 +62,11 @@ namespace UploadToServer
            if (_mediaFile == null)
                 return;
 
+            FileImage.IsVisible = true;
+            VideoImage.IsVisible = false;
             lblMessage.Text = "Ready to go";
-
+            oriPath = _mediaFile.Path;
+            
             filename = _mediaFile.Path.Split('\\').LastOrDefault().Split('/').LastOrDefault();
             fileExt = _mediaFile.Path.Split('.').Last();
             filePath = Constants.ImageRootPath + "/" + filename;
@@ -88,7 +100,10 @@ namespace UploadToServer
             if (_mediaFile == null)
                 return;
 
+            FileImage.IsVisible = false;
+            VideoImage.IsVisible = true;
             lblMessage.Text = "Ready to go";
+            oriPath = _mediaFile.Path;
 
             filename = _mediaFile.Path.Split('\\').LastOrDefault().Split('/').LastOrDefault();
             fileExt = _mediaFile.Path.Split('.').Last();
@@ -211,11 +226,58 @@ namespace UploadToServer
                         position.Timestamp, position.Latitude, position.Longitude, position.Altitude);
                     latitude = System.Convert.ToDecimal(position.Latitude);
                     longitude = System.Convert.ToDecimal(position.Longitude);
+
+                    var address = await locator.GetAddressesForPositionAsync(savedPosition, null);
+                    if (address == null || address.Count() == 0)
+                    {
+                        locAddress = "Unable to find address";
+                    }
+
+                    var a = address.FirstOrDefault();
+                    locAddress = $"Address: Thoroughfare = {a.Thoroughfare}\nLocality = {a.Locality}\nCountryCode = {a.CountryCode}\nCountryName = {a.CountryName}\nPostalCode = {a.PostalCode}\nSubLocality = {a.SubLocality}\nSubThoroughfare = {a.SubThoroughfare}";
                 }
+                
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Something went wrong", ex.Message, "OK");
+            }
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            CrossMediaManager.Current.StatusChanged += CurrentOnStatusChanged;
+        }
+
+        protected override void OnDisappearing()
+        {
+            CrossMediaManager.Current.StatusChanged -= CurrentOnStatusChanged;
+            base.OnDisappearing();
+        }
+
+        private void PlayStop_Clicked(object sender, EventArgs e)
+        {
+            string videoUrl = oriPath;
+            if (playStopButton.Text.ToUpper() == "PLAYBACK")
+            {
+                CrossMediaManager.Current.Play(videoUrl, MediaFileType.Video);
+            }
+            else
+            {
+                CrossMediaManager.Current.Stop();
+            }
+        }
+
+        private void CurrentOnStatusChanged(object sender, StatusChangedEventArgs e)
+        {
+            if (e.Status == MediaPlayerStatus.Playing)
+            {
+                playStopButton.Text = "Stop";
+            }
+            else
+            {
+                playStopButton.Text = "PlayBack";
             }
         }
     }

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:UploadToServer"
+             xmlns:forms="clr-namespace:Plugin.MediaManager.Forms;assembly=Plugin.MediaManager.Forms"
              x:Class="UploadToServer.MainPage"
              BackgroundColor="White">
 
@@ -9,10 +10,14 @@
         <StackLayout Spacing="10" Padding="10, 5, 10, 5">
             <Label Text="Upload File to Server" HorizontalOptions="Center" TextColor="Black" FontSize="36"/>
             <Button x:Name="takePhoto" Text="Take Photo" BackgroundColor="Navy" TextColor="White" Clicked="TakePhoto_Clicked"/>
+            <Image x:Name="FileImage" HeightRequest="200" WidthRequest="200" IsVisible="False"/>
+            
             <Button x:Name="takeVideo" Text="Take Video" BackgroundColor="Teal" TextColor="White" Clicked="TakeVideo_Clicked"/>
-            <Image x:Name="FileImage" HeightRequest="300"/>
+            <forms:VideoView x:Name="VideoImage" WidthRequest="360" HeightRequest="202" IsVisible="False"></forms:VideoView>
+            <Button x:Name="playStopButton" Text="PlayBack" Clicked="PlayStop_Clicked"></Button>
+                        
             <Label x:Name="lblMessage" TextColor="Black" FontSize="14" IsVisible="True"/>
-            <Button x:Name="uploaPhoto" Text="Upload Photo" BackgroundColor="Purple" TextColor="White" Clicked="UploadFile_Clicked"/>
+            <Button x:Name="uploaPhoto" Text="Upload" BackgroundColor="Purple" TextColor="White" Clicked="UploadFile_Clicked"/>
             <Label x:Name="labelGPS"/>
         </StackLayout>
     </ScrollView>

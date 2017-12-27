@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Plugin.Permissions;
+using Plugin.MediaManager.Forms.Android;
 
 namespace UploadToServer.Droid
 {
@@ -19,6 +20,8 @@ namespace UploadToServer.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+
+            VideoViewRenderer.Init();
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());
