@@ -160,7 +160,6 @@ namespace UploadToServer.Server.Controllers
                 var connectionString = string.Empty;
                 var json = string.Empty;
                 connectionString = ConfigurationManager.AppSettings["ConnectionString"];
-                //connectionString = "Server=tcp:uploadtoserver.database.windows.net,1433;Initial Catalog=UploadFileDB;Persist Security Info=False;User ID=uploadtoserveradmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=90;";
 
                 conn = new SqlConnection(connectionString);
                 command = new SqlCommand("BlobStorageIns", conn);
@@ -174,6 +173,16 @@ namespace UploadToServer.Server.Controllers
                 command.Parameters.Add("@senderNumber", SqlDbType.VarChar, 30);
                 command.Parameters.Add("@senderLat", SqlDbType.Decimal);
                 command.Parameters.Add("@senderLong", SqlDbType.Decimal);
+                command.Parameters.Add("@adminArea", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@countryCode", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@countryName", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@featureName", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@locality", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@postalCode", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@subAdminArea", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@subLocality", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@subThoroughFare", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@thoroughFare", SqlDbType.VarChar, 50);
                 command.Parameters.Add("@createdOn", SqlDbType.DateTime);
 
                 command.Parameters["@filePath"].Value = blobData.filePath;
@@ -181,6 +190,16 @@ namespace UploadToServer.Server.Controllers
                 command.Parameters["@senderNumber"].Value = blobData.senderNumber;
                 command.Parameters["@senderLat"].Value = blobData.senderLat;
                 command.Parameters["@senderLong"].Value = blobData.senderLong;
+                command.Parameters["@adminArea"].Value = blobData.adminArea;
+                command.Parameters["@countryCode"].Value = blobData.countryCode;
+                command.Parameters["@countryName"].Value = blobData.countryName;
+                command.Parameters["@featureName"].Value = blobData.featureName;
+                command.Parameters["@locality"].Value = blobData.locality;
+                command.Parameters["@postalCode"].Value = blobData.postalCode;
+                command.Parameters["@subAdminArea"].Value = blobData.subAdminArea;
+                command.Parameters["@subLocality"].Value = blobData.subLocality;
+                command.Parameters["@subThoroughFare"].Value = blobData.subThoroughFare;
+                command.Parameters["@thoroughFare"].Value = blobData.thoroughFare;
                 command.Parameters["@createdOn"].Value = DateTime.UtcNow;
 
                 command.ExecuteNonQuery();
@@ -207,8 +226,7 @@ namespace UploadToServer.Server.Controllers
 
                 var connectionString = string.Empty;
                 var json = string.Empty;
-                //connectionString = ConfigurationManager.AppSettings["ConnectionString"];
-                connectionString = "Server=tcp:uploadtoserver.database.windows.net,1433;Initial Catalog=UploadFileDB;Persist Security Info=False;User ID=uploadtoserveradmin;Password=Password123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=90;";
+                connectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
                 conn = new SqlConnection(connectionString);
                 command = new SqlCommand("BlobStorageIns", conn);
@@ -222,6 +240,16 @@ namespace UploadToServer.Server.Controllers
                 command.Parameters.Add("@senderNumber", SqlDbType.VarChar, 30);
                 command.Parameters.Add("@senderLat", SqlDbType.Decimal);
                 command.Parameters.Add("@senderLong", SqlDbType.Decimal);
+                command.Parameters.Add("@adminArea", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@countryCode", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@countryName", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@featureName", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@locality", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@postalCode", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@subAdminArea", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@subLocality", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@subThoroughFare", SqlDbType.VarChar, 50);
+                command.Parameters.Add("@thoroughFare", SqlDbType.VarChar, 50);
                 command.Parameters.Add("@createdOn", SqlDbType.DateTime);
 
                 command.Parameters["@filePath"].Value = blobData.filePath;
@@ -229,6 +257,16 @@ namespace UploadToServer.Server.Controllers
                 command.Parameters["@senderNumber"].Value = blobData.senderNumber;
                 command.Parameters["@senderLat"].Value = blobData.senderLat;
                 command.Parameters["@senderLong"].Value = blobData.senderLong;
+                command.Parameters["@adminArea"].Value = blobData.adminArea;
+                command.Parameters["@countryCode"].Value = blobData.countryCode;
+                command.Parameters["@countryName"].Value = blobData.countryName;
+                command.Parameters["@featureName"].Value = blobData.featureName;
+                command.Parameters["@locality"].Value = blobData.locality;
+                command.Parameters["@postalCode"].Value = blobData.postalCode;
+                command.Parameters["@subAdminArea"].Value = blobData.subAdminArea;
+                command.Parameters["@subLocality"].Value = blobData.subLocality;
+                command.Parameters["@subThoroughFare"].Value = blobData.subThoroughFare;
+                command.Parameters["@thoroughFare"].Value = blobData.thoroughFare;
                 command.Parameters["@createdOn"].Value = DateTime.UtcNow;
 
                 command.ExecuteNonQuery();

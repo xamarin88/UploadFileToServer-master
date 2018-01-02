@@ -24,6 +24,16 @@ namespace UploadToServer
         Position savedPosition;
         decimal latitude = 0;
         decimal longitude = 0;
+        string adminArea;
+        string countryCode;
+        string countryName;
+        string featureName;
+        string locality;
+        string postalCode;
+        string subAdminArea;
+        string subLocality;
+        string subThoroughFare;
+        string thoroughFare;
         string filename;
         string fileExt;
         string filePath;
@@ -109,10 +119,10 @@ namespace UploadToServer
             fileExt = _mediaFile.Path.Split('.').Last();
             filePath = Constants.ImageRootPath + "/" + filename;
 
-            FileImage.Source = ImageSource.FromStream(() =>
-            {
-                return _mediaFile.GetStream();
-            });
+            //FileImage.Source = ImageSource.FromStream(() =>
+            //{
+            //    return _mediaFile.GetStream();
+            //});
         }
 
         private async void UploadFile_Clicked(object sender, EventArgs e)
@@ -169,6 +179,16 @@ namespace UploadToServer
                     senderNumber = filePath,
                     senderLat = latitude,
                     senderLong = longitude,
+                    adminArea = adminArea,
+                    countryCode = countryCode,
+                    countryName = countryName,
+                    featureName = featureName,
+                    locality = locality,
+                    postalCode = postalCode,
+                    subAdminArea = subAdminArea,
+                    subLocality = subLocality,
+                    subThoroughFare = subThoroughFare,
+                    thoroughFare = thoroughFare
                 };
 
                 var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/UpdateBlobData";
@@ -235,6 +255,16 @@ namespace UploadToServer
 
                     var a = address.FirstOrDefault();
                     locAddress = $"Address: Thoroughfare = {a.Thoroughfare}\nLocality = {a.Locality}\nCountryCode = {a.CountryCode}\nCountryName = {a.CountryName}\nPostalCode = {a.PostalCode}\nSubLocality = {a.SubLocality}\nSubThoroughfare = {a.SubThoroughfare}";
+                    adminArea = a.AdminArea;
+                    countryCode = a.CountryCode;
+                    countryName = a.CountryName;
+                    featureName = a.FeatureName;
+                    locality = a.Locality;
+                    postalCode = a.PostalCode;
+                    subAdminArea = a.SubAdminArea;
+                    subLocality = a.SubLocality;
+                    subThoroughFare = a.SubThoroughfare;
+                    thoroughFare = a.Thoroughfare;
                 }
                 
             }
