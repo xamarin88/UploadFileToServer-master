@@ -191,7 +191,7 @@ namespace UploadToServer
                     thoroughFare = thoroughFare
                 };
 
-                var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/UpdateBlobData";
+                var uploadServiceBaseAddress = "http://uploadmediatoserver.azurewebsites.net/api/Files/UpdateBlobData2";
 
                 var client = new HttpClient();
                 client.Timeout = TimeSpan.FromMinutes(3);

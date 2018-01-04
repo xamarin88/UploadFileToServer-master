@@ -173,6 +173,53 @@ namespace UploadToServer.Server.Controllers
                 command.Parameters.Add("@senderNumber", SqlDbType.VarChar, 30);
                 command.Parameters.Add("@senderLat", SqlDbType.Decimal);
                 command.Parameters.Add("@senderLong", SqlDbType.Decimal);
+                command.Parameters.Add("@createdOn", SqlDbType.DateTime);
+
+                command.Parameters["@filePath"].Value = blobData.filePath;
+                command.Parameters["@fileExt"].Value = blobData.fileExt;
+                command.Parameters["@senderNumber"].Value = blobData.senderNumber;
+                command.Parameters["@senderLat"].Value = blobData.senderLat;
+                command.Parameters["@senderLong"].Value = blobData.senderLong;
+                command.Parameters["@createdOn"].Value = DateTime.UtcNow;
+
+                command.ExecuteNonQuery();
+
+                conn.Close();
+                conn.Dispose();
+
+                HttpResponseMessage response = Request.CreateResponse<BlobData>(HttpStatusCode.Created, blobData);
+                return response.StatusCode.ToString();
+            }
+            catch (Exception exception)
+            {
+                return exception.Message;
+            }
+        }
+
+        [Route("api/Files/UpdateBlobData2")]
+        public async Task<string> PostBlobData2(BlobData blobData)
+        {
+            try
+            {
+                SqlConnection conn = null;
+                SqlCommand command = null;
+
+                var connectionString = string.Empty;
+                var json = string.Empty;
+                connectionString = ConfigurationManager.AppSettings["ConnectionString"];
+
+                conn = new SqlConnection(connectionString);
+                command = new SqlCommand("BlobStorageIns2", conn);
+                command.CommandTimeout = 0;
+
+                command.CommandType = CommandType.StoredProcedure;
+                conn.Open();
+
+                command.Parameters.Add("@filePath", SqlDbType.VarChar, 255);
+                command.Parameters.Add("@fileExt", SqlDbType.VarChar, 10);
+                command.Parameters.Add("@senderNumber", SqlDbType.VarChar, 30);
+                command.Parameters.Add("@senderLat", SqlDbType.Decimal);
+                command.Parameters.Add("@senderLong", SqlDbType.Decimal);
                 command.Parameters.Add("@adminArea", SqlDbType.VarChar, 50);
                 command.Parameters.Add("@countryCode", SqlDbType.VarChar, 50);
                 command.Parameters.Add("@countryName", SqlDbType.VarChar, 50);

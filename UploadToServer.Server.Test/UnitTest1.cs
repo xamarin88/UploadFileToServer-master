@@ -126,5 +126,38 @@ namespace UploadToServer.Server.Test
 
             var result = await controller.PostBlobData(obj1);
         }
+
+        [TestMethod]
+        public async Task TestMethod5()
+        {
+            UploadsController controller = new UploadsController();
+
+            controller.Request = new HttpRequestMessage()
+            {
+                Properties = { { HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration() } }
+            };
+
+            var obj1 = new Models.BlobData
+            {
+
+                filePath = "a",
+                fileExt = "xxx",
+                senderNumber = "sender",
+                senderLat = System.Convert.ToDecimal(1),
+                senderLong = System.Convert.ToDecimal(2),
+                adminArea = "xxx",
+                countryCode = "xxx",
+                countryName = "xxx",
+                featureName = "xxx",
+                locality = "xxx",
+                postalCode = "xxx",
+                subAdminArea = "xxx",
+                subLocality = "xxx",
+                subThoroughFare = "xxx",
+                thoroughFare = "xxx"
+            };
+
+            var result = await controller.PostBlobData2(obj1);
+        }
     }
 }
